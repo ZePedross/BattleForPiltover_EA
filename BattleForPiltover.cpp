@@ -3,16 +3,18 @@
 #include <string.h>
 #include <set>
 
-int turretOutpost [8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
-int check_turrets(std::vector<std::vector<char>> map, int R, int C){
-    
-}
-
-int check_outposts(std::vector<std::vector<char>> map, int R, int C){
-    for(int i = 0; i < R; i++){
-        for(int j = 0; j < C; j++){
-            if(isdigit(map[i][j])){
-                check_turrets(map, i, j);
+int turretOutpost [4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+int check_outposts(std::vector<std::vector<char>> map, int R, int C) {
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < C; j++) {
+            if((i == 0 && j == 0) || (i == 0 && j == C - 1) || (i == R - 1 && j == 0) || (i == R - 1 && j == C - 1)){
+                if(map[i][j] == '2'){
+                    std::cout << map[i][j] << "\n";
+                }
+            }else if (i == 0 || i == R - 1 || j == 0 || j == C - 1) {
+                if(map[i][j] == '3'){
+                    std::cout << map[i][j] << "\n";
+                }
             }
         }
     }
@@ -45,6 +47,8 @@ int main() {
                 std::cin >> map[j][k];
             }
         }
+        check_outposts(map, R, C);
+        std::cout << "\n";
     }
 
 
