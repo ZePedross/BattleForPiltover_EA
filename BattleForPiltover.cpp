@@ -3,17 +3,66 @@
 #include <string.h>
 #include <set>
 
+
+
 int turretOutpost [4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
-int check_outposts(std::vector<std::vector<char>> map, int R, int C) {
+
+void placeTurret(std::vector<std::vector<char>> &map, int R, int C){
+    for(int i = 0; i < 4; i++){
+        int newR = R + turretOutpost[i][0];
+        int newC = C + turretOutpost[i][1];
+
+        if(newR >= 0 && newR < map.size() && newC >= 0 && newC < map[0].size()){
+            if(map[newR][newC] == '.'){
+                map[newR][newC] = 'T';
+
+                //Percorrer para baixo na mesma coluna
+                for(int j = newR + 1; j < map.size(); j++){
+                    if(map[j][newC] == '#' || isdigit(map[j][newC])){
+                        break;
+                    } else if(map[j][newC] == '.'){
+                        map[j][newC] = 'c';
+                    }
+                }
+
+                //Percorrer para cima na mesma coluna
+                for(int j = newR - 1; j >= 0; j--){
+                    if(map[j][newC] == '#' || isdigit(map[j][newC])){
+                        break;
+                    } else if(map[j][newC] == '.'){
+                        map[j][newC] = 'c';
+                    }
+                }
+
+                //Percorrer para a esquerda na mesma linha
+                for(int k = newC - 1; k >= 0; k--){
+                    if(map[newR][k] == '#' || isdigit(map[newR][k])){
+                        break;
+                    } else if(map[newR][k] == '.'){
+                        map[newR][k] = 'c';
+                    }
+                }
+
+                //Percorrer para a direita na mesma linha
+                for(int k = newC + 1; k < map[0].size(); k++){
+                    if(map[newR][k] == '#' || isdigit(map[newR][k])){
+                        break;
+                    } else if(map[newR][k] == '.'){
+                        map[newR][k] = 'c';
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+int check_outposts(std::vector<std::vector<char>> &map, int R, int C) {
     for (int i = 0; i < R; i++) {
         for (int j = 0; j < C; j++) {
             if((i == 0 && j == 0) || (i == 0 && j == C - 1) || (i == R - 1 && j == 0) || (i == R - 1 && j == C - 1)){
                 if(map[i][j] == '2'){
-                    std::cout << map[i][j] << "\n";
-                }
-            }else if (i == 0 || i == R - 1 || j == 0 || j == C - 1) {
-                if(map[i][j] == '3'){
-                    std::cout << map[i][j] << "\n";
+                    placeTurret(map, i, j);
                 }
             }
         }
@@ -48,6 +97,12 @@ int main() {
             }
         }
         check_outposts(map, R, C);
+        for(int j = 0; j < R; j++){
+            for(int k = 0; k < C; k++){
+                std::cout << map[j][k];
+            }
+            std::cout << "\n";
+        }
         std::cout << "\n";
     }
 
